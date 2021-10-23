@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shop/components/product_item.dart';
 import 'package:shop/data/dummy_data.dart';
 import 'package:shop/models/product.dart';
 
@@ -17,7 +18,7 @@ class ProductsOverviewScreen extends StatelessWidget {
         child: GridView.builder(
             // item count evita que sejam iterados itens que nao existem dando erro na tela
             itemCount: loadedProducts.length,
-            itemBuilder: (ctx, index) => Text(loadedProducts[index].title),
+            itemBuilder: (ctx, index) => ProductItem( product: loadedProducts[index], ),
             //Sliver uma area com scrol na tela
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
