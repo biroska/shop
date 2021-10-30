@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:shop/provider/CounterProvider.dart';
-import 'package:shop/screens/counter_screen.dart';
 import 'package:shop/screens/product_detail_screen.dart';
 import 'package:shop/screens/products_overview_screen.dart';
 import 'package:shop/utils/app_routes.dart';
@@ -27,8 +26,8 @@ class MyApp extends StatelessWidget {
           ),
         ),
         home: ProductsOverviewScreen(),
-        routes: { AppRoutes.PRODUCT_DETAIL: (context) => CounterScreen( ) },
-        // routes: { AppRoutes.PRODUCT_DETAIL: (context) => ProductDetailScreen( ) },
+        // routes: { AppRoutes.PRODUCT_DETAIL: (context) => CounterScreen( ) },
+        routes: { AppRoutes.PRODUCT_DETAIL: (context) => ProductDetailScreen( ) },
       ),
     );
   }
