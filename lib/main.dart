@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:shop/provider/CounterProvider.dart';
+import 'package:provider/provider.dart';
+import 'package:shop/notifiers/product_list.dart';
 import 'package:shop/screens/product_detail_screen.dart';
 import 'package:shop/screens/products_overview_screen.dart';
 import 'package:shop/utils/app_routes.dart';
@@ -14,7 +15,9 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return CounterProvider(
+    
+    return ChangeNotifierProvider(
+      create: (_) => ProductList(),
       child: MaterialApp(
         title: 'Flutter Demo',
         debugShowCheckedModeBanner: false,
