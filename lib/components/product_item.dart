@@ -8,7 +8,9 @@ class ProductItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    final product = Provider.of<Product>(context);
+// Utilizando Consumer e provider listen: false para que apenas o icone de favorito seja
+// atualizado nos cards, nao atualiza a renderizacao do card todo, apenas o icone
+    final product = Provider.of<Product>(context, listen: false);
 
     return ClipRRect(
       borderRadius: BorderRadius.circular(10),
@@ -27,13 +29,18 @@ class ProductItem extends StatelessWidget {
             textAlign: TextAlign.center,
           ),
           backgroundColor: Colors.black45,
-          leading: IconButton(
-            onPressed: () {
-              product.toggleFavorite();
-            },
-            icon: Icon(
-              product.isFavourite ? Icons.favorite : Icons.favorite_border,
-              color: Theme.of(context).colorScheme.secondary,
+
+// Utilizando Consumer e provider listen: false para que apenas o icone de favorito seja
+// atualizado nos cards, nao atualiza a renderizacao do card todo, apenas o icone
+          leading: Consumer<Product>(
+            builder: ( ctx, product, _ ) => IconButton(
+              onPressed: () {
+                product.toggleFavorite();
+              },
+              icon: Icon(
+                product.isFavourite ? Icons.favorite : Icons.favorite_border,
+                color: Theme.of(context).colorScheme.secondary,
+              ),
             ),
           ),
           trailing: IconButton(
