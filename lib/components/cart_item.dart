@@ -1,0 +1,13 @@
+import 'package:flutter/material.dart';
+import 'package:shop/models/cart_item.dart';
+
+class CartItemWidget extends StatelessWidget {
+  final CartItem cartItem;
+
+  CartItemWidget({Key? key, required this.cartItem}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Text( cartItem.name );
+  }
+}

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shop/components/cart_item.dart';
 import 'package:shop/models/cart.dart';
 
 class CartScreen extends StatelessWidget {
@@ -9,6 +10,7 @@ class CartScreen extends StatelessWidget {
   Widget build(BuildContext context) {
 
     final Cart cart = Provider.of(context);
+    final items = cart.items.values.toList();
 
     return Scaffold(
       appBar: AppBar(
@@ -33,11 +35,13 @@ class CartScreen extends StatelessWidget {
                         backgroundColor: Theme.of(context).primaryColor ),
                   // Coloca um espaco entre o Chip e o botao
                   const Spacer(),
-                  TextButton(onPressed: (){}, child: const Text('COMPRAR'), style: TextButton.styleFrom(textStyle: TextStyle( color: Theme.of(context).primaryColor ) ))
+                  TextButton(onPressed: (){}, child: const Text('COMPRAR'), style: TextButton.styleFrom(textStyle: TextStyle( color: Theme.of(context).primaryColor ) )),
+
                 ],
               ),
             ),
           ),
+          Expanded(child: ListView.builder( itemCount: items.length, itemBuilder: (ctx, item) => CartItemWidget( cartItem: items[ item ] ) ) )
         ],
       ),
     );
