@@ -28,6 +28,7 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           fontFamily: 'Lato',
+          primaryColor: Colors.purple,
           colorScheme: ColorScheme.fromSwatch(
             accentColor: Colors.deepOrange,
             primarySwatch: Colors.purple,
