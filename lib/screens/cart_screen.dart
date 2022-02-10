@@ -20,7 +20,7 @@ class CartScreen extends StatelessWidget {
         children: [
           Card(
             // Coloca um espacamento maior entre a borda do aparelho e os componentes
-            margin: const EdgeInsets.all( 25 ),
+            margin: const EdgeInsets.symmetric( horizontal: 15,  vertical:  25 ),
             child: Padding(
               // Coloca um espacamento entre a borda do card e os componentes
               padding: const EdgeInsets.all( 10 ),
