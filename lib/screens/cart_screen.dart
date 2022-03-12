@@ -32,7 +32,7 @@ class CartScreen extends StatelessWidget {
                   const Text('Total',style: TextStyle(fontSize: 20)),
                   // Espacamento entre o total e o Chip
                   const SizedBox( width: 10 ),
-                  Chip( label: Text('R\$ ${cart.totalAmount}', style: TextStyle( color: Theme.of(context).primaryTextTheme.headline6?.color )),
+                  Chip( label: Text('R\$ ${cart.totalAmount.toStringAsFixed(2)}', style: TextStyle( color: Theme.of(context).primaryTextTheme.headline6?.color )),
                         backgroundColor: Theme.of(context).primaryColor ),
                   // Coloca um espaco entre o Chip e o botao
                   const Spacer(),

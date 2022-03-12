@@ -10,19 +10,20 @@ class AppDrawer extends StatelessWidget {
       child: Column(
         children: [
           AppBar(
-            title: Text('Bem vindo usuário'),
+            title: const Text('Bem vindo usuário'),
+            automaticallyImplyLeading: false,
           ),
-          Divider(),
+          const Divider(),
           ListTile(
-            leading: Icon( Icons.shop ),
-            title: Text('Loja'),
+            leading: const Icon( Icons.shop ),
+            title: const Text('Loja'),
             onTap: (){
               Navigator.of(context).pushReplacementNamed(AppRoutes.HOME);
             },
           ),
-          Divider(),
+          const Divider(),
           ListTile(
-            leading: Icon( Icons.payment ),
+            leading: const Icon( Icons.payment ),
             title: const Text('Pedidos'),
             onTap: (){
               Navigator.of(context).pushReplacementNamed(AppRoutes.ORDERS);
