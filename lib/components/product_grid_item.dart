@@ -51,6 +51,8 @@ class ProductGridItem extends StatelessWidget {
               color: Theme.of(context).colorScheme.secondary,
             ),
             onPressed: () {
+              // Esconde o ultimo snackbar, para evitar de ficar subindo varios snacks
+              ScaffoldMessenger.of(context).hideCurrentSnackBar();
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                 content: Text('Produto adicionado com sucesso!'),
                 duration: Duration(seconds: 2),
