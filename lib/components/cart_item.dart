@@ -25,6 +25,21 @@ class CartItemWidget extends StatelessWidget {
         // Se o item nao for removido, por nao encontrar o ID, ocorre exception
         Provider.of<Cart>(context, listen: false).removeItem( cartItem.productId );
       },
+      confirmDismiss: (_){
+        return showDialog<bool>(context: context,
+                          builder: ( context ) => AlertDialog(
+                            title: Text('Tem certeza?'),
+                            content: Text('Quer remover o item do carrinho?'),
+                            actions: [
+                              TextButton( child: Text('Não'),
+                                onPressed: (){
+                                Navigator.of(context).pop(false);
+                                }, ),
+                              TextButton( child: Text('Sim'),
+                                onPressed: (){ Navigator.of(context).pop(true); }, )
+                            ],
+                          ) );
+      },
       child: Card(
         margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 4),
         child: Padding(
