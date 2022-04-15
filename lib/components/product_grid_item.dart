@@ -54,8 +54,8 @@ class ProductGridItem extends StatelessWidget {
               // Esconde o ultimo snackbar, para evitar de ficar subindo varios snacks
               ScaffoldMessenger.of(context).hideCurrentSnackBar();
               ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                content: Text('Produto adicionado com sucesso!'),
-                duration: Duration(seconds: 2),
+                content: const Text('Produto adicionado com sucesso!'),
+                duration: const Duration(seconds: 2),
                 action: SnackBarAction(
                   label: 'Desfazer',
                   onPressed: () {
