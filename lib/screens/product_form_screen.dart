@@ -1,8 +1,8 @@
-import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:shop/models/product.dart';
+import 'package:provider/provider.dart';
+import 'package:shop/models/product_list.dart';
 
 class ProductFormScreen extends StatefulWidget {
   const ProductFormScreen({Key? key}) : super(key: key);
@@ -61,17 +61,9 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
 
     _formKey.currentState?.save();
 
-    final newProduct = new Product(
-        id: Random().nextDouble().toString(),
-        name: _formData['name'] as String,
-        description: _formData['description'] as String,
-        price: _formData['price'] as double,
-        imageUrl: _formData['url'] as String);
+    Provider.of<ProductList>(context, listen: false).addProductfromData( _formData );
 
-    print(newProduct.name);
-    print(newProduct.description);
-    print(newProduct.price);
-    print(newProduct.imageUrl);
+    Navigator.of(context).pop();
   }
 
   @override
@@ -119,10 +111,10 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
                   textInputAction: TextInputAction.next,
                   onSaved: (price) =>
                       _formData['price'] = double.parse(price ?? '0'),
-                  validator: (_price){
+                  validator: (_price) {
                     final priceString = _price ?? '';
-                    final price = double.tryParse( priceString ) ?? -1;
-                    if (price <= 0){
+                    final price = double.tryParse(priceString) ?? -1;
+                    if (price <= 0) {
                       return 'Informe um preço válido';
                     }
                     return null;
@@ -166,7 +158,7 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
                       onSaved: (url) => _formData['url'] = url ?? '',
                       validator: (_url) {
                         String url = _url ?? '';
-                        if ( !isValidImageUrl( url ) ){
+                        if (!isValidImageUrl(url)) {
                           return 'Informe uma url válida';
                           // https://uploads.metropoles.com/wp-content/uploads/2021/06/09110407/cachorro-fofo-usando-oculos_23-2148917262-1-600x380.jpg
                         }
