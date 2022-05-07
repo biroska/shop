@@ -41,20 +41,37 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
     setState(() {});
   }
 
+  bool isValidImageUrl(String url) {
+    bool isValidUrl = Uri.tryParse(url)?.hasAbsolutePath ?? false;
+    String rulLowCase = url.toLowerCase();
+
+    bool endsWithFile = rulLowCase.endsWith('.png') ||
+        rulLowCase.endsWith('.jpg') ||
+        rulLowCase.endsWith('.jpeg');
+
+    return isValidUrl && endsWithFile;
+  }
+
   void _submitForm() {
+    final isValid = _formKey.currentState?.validate() ?? false;
+
+    if (!isValid) {
+      return;
+    }
+
     _formKey.currentState?.save();
 
     final newProduct = new Product(
         id: Random().nextDouble().toString(),
-        name: _formData['name'] as String ,
+        name: _formData['name'] as String,
         description: _formData['description'] as String,
         price: _formData['price'] as double,
         imageUrl: _formData['url'] as String);
 
-    print( newProduct.name );
-    print( newProduct.description );
-    print( newProduct.price );
-    print( newProduct.imageUrl );
+    print(newProduct.name);
+    print(newProduct.description);
+    print(newProduct.price);
+    print(newProduct.imageUrl);
   }
 
   @override
@@ -81,6 +98,16 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
                     FocusScope.of(context).requestFocus(_priceFocus);
                   },
                   onSaved: (name) => _formData['name'] = name ?? '',
+                  validator: (_name) {
+                    final name = _name ?? '';
+                    if (name.trim().isEmpty) {
+                      return 'Nome é obrigatório';
+                    }
+                    if (name.trim().length < 3) {
+                      return 'Nome precisa no mínimo 3 letras';
+                    }
+                    return null;
+                  },
                 ),
                 TextFormField(
                   decoration: const InputDecoration(
@@ -92,6 +119,14 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
                   textInputAction: TextInputAction.next,
                   onSaved: (price) =>
                       _formData['price'] = double.parse(price ?? '0'),
+                  validator: (_price){
+                    final priceString = _price ?? '';
+                    final price = double.tryParse( priceString ) ?? -1;
+                    if (price <= 0){
+                      return 'Informe um preço válido';
+                    }
+                    return null;
+                  },
                   onFieldSubmitted: (_) {
                     FocusScope.of(context).requestFocus(_descriptionFocus);
                   },
@@ -106,6 +141,16 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
                   textInputAction: TextInputAction.next,
                   onSaved: (description) =>
                       _formData['description'] = description ?? '',
+                  validator: (_name) {
+                    final name = _name ?? '';
+                    if (name.trim().isEmpty) {
+                      return 'Descrição é obrigatória';
+                    }
+                    if (name.trim().length < 10) {
+                      return 'Descrição precisa no mínimo 10 letras';
+                    }
+                    return null;
+                  },
                 ),
                 Row(crossAxisAlignment: CrossAxisAlignment.end, children: [
                   Expanded(
@@ -119,6 +164,14 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
                       textInputAction: TextInputAction.done,
                       onFieldSubmitted: (_) => _submitForm(),
                       onSaved: (url) => _formData['url'] = url ?? '',
+                      validator: (_url) {
+                        String url = _url ?? '';
+                        if ( !isValidImageUrl( url ) ){
+                          return 'Informe uma url válida';
+                          // https://uploads.metropoles.com/wp-content/uploads/2021/06/09110407/cachorro-fofo-usando-oculos_23-2148917262-1-600x380.jpg
+                        }
+                        return null;
+                      },
                     ),
                   ),
                   Container(
