@@ -1,4 +1,3 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -42,10 +41,10 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    if ( _formData.isEmpty ){
+    if (_formData.isEmpty) {
       final arg = ModalRoute.of(context)?.settings.arguments;
 
-      if ( arg != null ){
+      if (arg != null) {
         final product = arg as Product;
 
         _formData['id'] = product.id;
@@ -56,7 +55,6 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
 
         _urlController.text = product.imageUrl;
       }
-
     }
   }
 
@@ -84,7 +82,7 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
 
     _formKey.currentState?.save();
 
-    Provider.of<ProductList>(context, listen: false).saveProduct( _formData );
+    Provider.of<ProductList>(context, listen: false).saveProduct(_formData);
 
     Navigator.of(context).pop();
   }
@@ -201,9 +199,13 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
                     alignment: Alignment.center,
                     child: _urlController.text.isEmpty
                         ? const Text('Informe a url')
-                        : FittedBox(
-                            child: Image.network(_urlController.text),
-                            fit: BoxFit.cover,
+                        : Container(
+                            width: 100,
+                            height: 100,
+                            child: FittedBox(
+                              child: Image.network(_urlController.text),
+                              fit: BoxFit.cover,
+                            ),
                           ),
                   ),
                 ]),
