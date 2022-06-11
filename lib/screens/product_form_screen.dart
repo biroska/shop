@@ -22,6 +22,8 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
 
   final _formData = Map<String, Object>();
 
+  bool _isLoading = false;
+
   @override
   void initState() {
     super.initState();
@@ -80,11 +82,15 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
       return;
     }
 
+    setState(() => _isLoading = true );
+
     _formKey.currentState?.save();
 
-    Provider.of<ProductList>(context, listen: false).saveProduct(_formData);
-
-    Navigator.of(context).pop();
+    Provider.of<ProductList>(context, listen: false)
+        .saveProduct(_formData).then((value) {
+          setState(() => _isLoading = false );
+          Navigator.of(context).pop();
+    });
   }
 
   @override
@@ -96,7 +102,7 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
           IconButton(onPressed: _submitForm, icon: const Icon(Icons.save)),
         ],
       ),
-      body: Padding(
+      body: _isLoading ? Center( child: CircularProgressIndicator() ,)  :  Padding(
         padding: const EdgeInsets.all(15),
         child: Form(
             key: _formKey,
@@ -199,14 +205,7 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
                     alignment: Alignment.center,
                     child: _urlController.text.isEmpty
                         ? const Text('Informe a url')
-                        : Container(
-                            width: 100,
-                            height: 100,
-                            child: FittedBox(
-                              child: Image.network(_urlController.text),
-                              fit: BoxFit.cover,
-                            ),
-                          ),
+                        : Image.network(_urlController.text),
                   ),
                 ]),
               ],
