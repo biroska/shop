@@ -8,9 +8,12 @@ import 'package:shop/data/dummy_data.dart';
 import 'package:shop/models/product.dart';
 
 class ProductList with ChangeNotifier {
-  final List<Product> _items = DUMMY_PRODUCTS;
+  final List<Product> _items = [];
+  // final List<Product> _items = DUMMY_PRODUCTS;
 
   final _baseUrl = 'https://shop-flutter-b913d-default-rtdb.firebaseio.com';
+  final _url =
+      'https://shop-flutter-b913d-default-rtdb.firebaseio.com/produtos.json';
 
   // Retorna uma copia da lista de itens e nao a lista em si
   List<Product> get items => [..._items];
@@ -29,7 +32,6 @@ class ProductList with ChangeNotifier {
             }));
 
     return future.then((response) {
-
       final id = jsonDecode(response.body)['name'];
 
       _items.add(Product(
@@ -42,6 +44,31 @@ class ProductList with ChangeNotifier {
 
       notifyListeners();
     });
+  }
+
+  Future<void> loadProducts() async {
+    final response = await http.get(Uri.parse(_url));
+
+    if ( response.body == 'null' ){
+      return;
+    }
+
+    _items.clear();
+    Map<String, dynamic> data = jsonDecode(response.body);
+
+    data.forEach((productID, productData) {
+      _items.add(
+        Product(
+          id: productID,
+          name: productData['name'],
+          description: productData['description'],
+          price: productData['price'],
+          imageUrl: productData['imageUrl'],
+          isFavourite: productData['isFavourite'],
+        ),
+      );
+    });
+    notifyListeners();
   }
 
   Future<void> saveProduct(Map<String, Object> data) {

@@ -4,6 +4,7 @@ import 'package:shop/components/app_drawer.dart';
 import 'package:shop/components/badge.dart';
 import 'package:shop/components/product_grid.dart';
 import 'package:shop/models/cart.dart';
+import 'package:shop/models/product_list.dart';
 import 'package:shop/utils/app_routes.dart';
 
 enum FilterOptions { Favorite, All }
@@ -14,7 +15,20 @@ class ProductsOverviewScreen extends StatefulWidget {
 }
 
 class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
+  bool _isLoading = true;
   bool _showFavoriteOnly = false;
+
+  @override
+  void initState() {
+    super.initState();
+    Provider.of<ProductList>(context, listen: false)
+        .loadProducts()
+        .then((value) {
+      setState(() {
+        _isLoading = false;
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +75,11 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
       //Padding para que os elementos nao fiquem colados nas bordas das telas
       body: Padding(
         padding: const EdgeInsets.all(10),
-        child: ProductGrid(_showFavoriteOnly),
+        child: _isLoading
+            ? const Center(
+                child: CircularProgressIndicator(),
+              )
+            : ProductGrid(_showFavoriteOnly),
       ),
       drawer: const AppDrawer(),
     );

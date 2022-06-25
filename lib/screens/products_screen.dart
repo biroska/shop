@@ -8,6 +8,10 @@ import 'package:shop/utils/app_routes.dart';
 class ProductsScreen extends StatelessWidget {
   const ProductsScreen({Key? key}) : super(key: key);
 
+  Future<void> _refreshProducts( BuildContext context ){
+    return Provider.of<ProductList>(context, listen: false).loadProducts();
+  }
+
   @override
   Widget build(BuildContext context) {
 
@@ -20,15 +24,18 @@ class ProductsScreen extends StatelessWidget {
           Navigator.of( context ).pushNamed( AppRoutes.PRODUCT_FORM );
         }, icon: const Icon( Icons.add ))
       ],),
-      body: Padding(
-        padding: EdgeInsets.all(8),
-        child: ListView.builder(
-          itemCount: products.itemsCount,
-          itemBuilder: (context, item) => Column(
-            children: [
-              ProductItem( product: products.items[item], ),
-              const Divider()
-            ],
+      body: RefreshIndicator(
+        onRefresh: () => _refreshProducts( context ),
+        child: Padding(
+          padding: EdgeInsets.all(8),
+          child: ListView.builder(
+            itemCount: products.itemsCount,
+            itemBuilder: (context, item) => Column(
+              children: [
+                ProductItem( product: products.items[item], ),
+                const Divider()
+              ],
+            ),
           ),
         ),
       ),
