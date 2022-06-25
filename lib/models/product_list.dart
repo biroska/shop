@@ -12,8 +12,6 @@ class ProductList with ChangeNotifier {
 
   final _baseUrl = 'https://shop-flutter-b913d-default-rtdb.firebaseio.com';
 
-  bool _showFavoriteOnly = false;
-
   // Retorna uma copia da lista de itens e nao a lista em si
   List<Product> get items => [..._items];
   List<Product> get favoriteItems =>
@@ -87,6 +85,7 @@ class ProductList with ChangeNotifier {
   }
 }
 
+// bool _showFavoriteOnly = false;
 // bool _showFavoriteOnly = false;
 //
 // // Retorna uma copia da lista de itens e nao a lista em si

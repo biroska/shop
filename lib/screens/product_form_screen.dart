@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shop/models/product.dart';
@@ -75,7 +74,7 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
     return isValidUrl && endsWithFile;
   }
 
-  void _submitForm() {
+  Future<void> _submitForm() async {
     final isValid = _formKey.currentState?.validate() ?? false;
 
     if (!isValid) {
@@ -86,18 +85,25 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
 
     _formKey.currentState?.save();
 
-    Provider.of<ProductList>(context, listen: false)
-        .saveProduct(_formData)
-        .catchError((error) {
-      return showDialog<void>(context: context, builder: (ctx) => AlertDialog(
-        title: Text("Ocorreu um erro!"),
-        content: Text(error.toString()),
-        actions: [TextButton(onPressed: ()=> Navigator.of(context).pop(), child: Text('OK'))],
-      ) );
-    }).then((value) {
-      setState(() => _isLoading = false);
+    try {
+      await Provider.of<ProductList>(context, listen: false)
+          .saveProduct(_formData);
       Navigator.of(context).pop();
-    });
+    } catch (error) {
+      await showDialog<void>(
+          context: context,
+          builder: (ctx) => AlertDialog(
+                title: const Text("Ocorreu um erro!"),
+                content: Text(error.toString()),
+                actions: [
+                  TextButton(
+                      onPressed: () => Navigator.of(context).pop(),
+                      child: const Text('OK'))
+                ],
+              ));
+    } finally {
+      setState(() => _isLoading = false);
+    }
   }
 
   @override
@@ -110,7 +116,7 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
         ],
       ),
       body: _isLoading
-          ? Center(
+          ? const Center(
               child: CircularProgressIndicator(),
             )
           : Padding(
