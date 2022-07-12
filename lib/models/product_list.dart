@@ -4,16 +4,14 @@ import 'dart:math';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
-import 'package:shop/data/dummy_data.dart';
 import 'package:shop/models/product.dart';
 
 class ProductList with ChangeNotifier {
   final List<Product> _items = [];
   // final List<Product> _items = DUMMY_PRODUCTS;
 
-  final _baseUrl = 'https://shop-flutter-b913d-default-rtdb.firebaseio.com';
-  final _url =
-      'https://shop-flutter-b913d-default-rtdb.firebaseio.com/produtos.json';
+  final _baseUrl = 'https://shop-flutter-b913d-default-rtdb.firebaseio.com/produtos';
+  final _urlProdutos = 'https://shop-flutter-b913d-default-rtdb.firebaseio.com/produtos.json';
 
   // Retorna uma copia da lista de itens e nao a lista em si
   List<Product> get items => [..._items];
@@ -22,7 +20,7 @@ class ProductList with ChangeNotifier {
 
   Future<void> addProduct(Product product) {
     final Future<Response> future =
-        http.post(Uri.parse('$_baseUrl/produtos.json'),
+        http.post(Uri.parse( _urlProdutos ),
             body: jsonEncode({
               "name": product.name,
               "description": product.description,
@@ -47,7 +45,7 @@ class ProductList with ChangeNotifier {
   }
 
   Future<void> loadProducts() async {
-    final response = await http.get(Uri.parse(_url));
+    final response = await http.get(Uri.parse(_urlProdutos));
 
     if ( response.body == 'null' ){
       return;
@@ -92,18 +90,39 @@ class ProductList with ChangeNotifier {
     int index = _items.indexWhere((p) => p.id == product.id);
 
     if (index >= 0) {
+
+      final Future<Response> future =
+      http.patch(Uri.parse('$_baseUrl/${product.id}.json'),
+          body: jsonEncode({
+            "name": product.name,
+            "description": product.description,
+            "price": product.price,
+            "imageUrl": product.imageUrl,
+          }));
+
       _items[index] = product;
       notifyListeners();
     }
     return Future.value();
   }
 
-  void removeProduct(Product product) {
+  Future<void> removeProduct(Product product) async {
     int index = _items.indexWhere((p) => p.id == product.id);
 
     if (index >= 0) {
-      _items.removeWhere((p) => p.id == product.id);
+
+      final product = _items[ index ];
+
+      _items.remove( product );
       notifyListeners();
+
+      final response = await
+      http.delete(Uri.parse('$_baseUrl/${product.id}.json'),);
+
+      if ( response.statusCode >= 400  ){
+        _items.insert( index, product);
+        notifyListeners();
+      }
     }
   }
 
