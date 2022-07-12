@@ -6,6 +6,8 @@ import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 import 'package:shop/models/product.dart';
 
+import '../exceptions/http_exception.dart';
+
 class ProductList with ChangeNotifier {
   final List<Product> _items = [];
   // final List<Product> _items = DUMMY_PRODUCTS;
@@ -122,6 +124,9 @@ class ProductList with ChangeNotifier {
       if ( response.statusCode >= 400  ){
         _items.insert( index, product);
         notifyListeners();
+
+        throw HttpException( msg: 'Não foi possível excluir o produto!',
+            statusCode: response.statusCode );
       }
     }
   }
