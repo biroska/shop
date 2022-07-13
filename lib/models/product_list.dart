@@ -7,13 +7,11 @@ import 'package:http/http.dart';
 import 'package:shop/models/product.dart';
 
 import '../exceptions/http_exception.dart';
+import '../utils/constants.dart';
 
 class ProductList with ChangeNotifier {
   final List<Product> _items = [];
   // final List<Product> _items = DUMMY_PRODUCTS;
-
-  final _baseUrl = 'https://shop-flutter-b913d-default-rtdb.firebaseio.com/produtos';
-  final _urlProdutos = 'https://shop-flutter-b913d-default-rtdb.firebaseio.com/produtos.json';
 
   // Retorna uma copia da lista de itens e nao a lista em si
   List<Product> get items => [..._items];
@@ -22,7 +20,7 @@ class ProductList with ChangeNotifier {
 
   Future<void> addProduct(Product product) {
     final Future<Response> future =
-        http.post(Uri.parse( _urlProdutos ),
+        http.post(Uri.parse( Constants.PRODUCT_URL ),
             body: jsonEncode({
               "name": product.name,
               "description": product.description,
@@ -47,7 +45,7 @@ class ProductList with ChangeNotifier {
   }
 
   Future<void> loadProducts() async {
-    final response = await http.get(Uri.parse(_urlProdutos));
+    final response = await http.get(Uri.parse( Constants.PRODUCT_URL ));
 
     if ( response.body == 'null' ){
       return;
@@ -94,7 +92,7 @@ class ProductList with ChangeNotifier {
     if (index >= 0) {
 
       final Future<Response> future =
-      http.patch(Uri.parse('$_baseUrl/${product.id}.json'),
+      http.patch(Uri.parse('${Constants.PRODUCT_BASE_URL}/${product.id}.json'),
           body: jsonEncode({
             "name": product.name,
             "description": product.description,
@@ -119,7 +117,7 @@ class ProductList with ChangeNotifier {
       notifyListeners();
 
       final response = await
-      http.delete(Uri.parse('$_baseUrl/${product.id}.json'),);
+      http.delete(Uri.parse('${Constants.PRODUCT_BASE_URL}/${product.id}.json'),);
 
       if ( response.statusCode >= 400  ){
         _items.insert( index, product);
