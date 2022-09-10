@@ -26,6 +26,7 @@ class AuthScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Container(
+                  margin: EdgeInsets.only( bottom: 20 ),
                   padding:
                       const EdgeInsets.symmetric(vertical: 10, horizontal: 70),
                   // Cascade operator ".." faz metodos de retorno void retornarem a instancia da qual foi chamado
