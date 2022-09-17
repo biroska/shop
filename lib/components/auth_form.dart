@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../models/auth.dart';
 
 enum AuthMode { Signup, Login }
 
@@ -19,25 +22,26 @@ class _AuthFormState extends State<AuthForm> {
   bool _isLogin() => _authMode == AuthMode.Login;
   bool _isSignup() => _authMode == AuthMode.Signup;
 
-  void _submit() {
-
+  Future<void> _submit() async {
     final isValid = _formKey.currentState?.validate() ?? false;
 
-    if (  !isValid ){
+    if (!isValid) {
       return;
     }
 
-    setState(() => _isLoading = true );
+    setState(() => _isLoading = true);
 
     _formKey.currentState?.save();
 
-    if ( _isLogin() ) {
+    Auth auth = Provider.of(context, listen: false);
 
+    if (_isLogin()) {
+      await auth.login(_authData['email']!, _authData['password']!);
     } else {
-
+      await auth.signup(_authData['email']!, _authData['password']!);
     }
 
-    setState(() => _isLoading = false );
+    setState(() => _isLoading = false);
   }
 
   void _switchAuthMode() {
@@ -93,7 +97,8 @@ class _AuthFormState extends State<AuthForm> {
               ),
               if (_isSignup())
                 TextFormField(
-                  decoration: const InputDecoration(labelText: 'Confirmar Senha'),
+                  decoration:
+                      const InputDecoration(labelText: 'Confirmar Senha'),
                   keyboardType: TextInputType.emailAddress,
                   obscureText: true,
                   validator: _isLogin()
@@ -125,7 +130,7 @@ class _AuthFormState extends State<AuthForm> {
                     _isLogin() ? 'Entrar' : 'Registrar',
                   ),
                 ),
-              Spacer(),
+              const Spacer(),
               TextButton(
                   onPressed: _switchAuthMode,
                   child: Text(
