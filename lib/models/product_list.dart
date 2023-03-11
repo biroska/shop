@@ -10,8 +10,12 @@ import '../exceptions/http_exception.dart';
 import '../utils/constants.dart';
 
 class ProductList with ChangeNotifier {
-  final List<Product> _items = [];
+  String _token;
+  List<Product> _items = [];
   // final List<Product> _items = DUMMY_PRODUCTS;
+
+  ProductList(this._token, this._items);
+
 
   // Retorna uma copia da lista de itens e nao a lista em si
   List<Product> get items => [..._items];
@@ -45,13 +49,14 @@ class ProductList with ChangeNotifier {
   }
 
   Future<void> loadProducts() async {
-    final response = await http.get(Uri.parse( Constants.PRODUCT_URL ));
+    _items.clear();
+
+    final response = await http.get(Uri.parse( '${Constants.PRODUCT_URL}?auth=$_token' ));
 
     if ( response.body == 'null' ){
       return;
     }
 
-    _items.clear();
     Map<String, dynamic> data = jsonDecode(response.body);
 
     data.forEach((productID, productData) {
